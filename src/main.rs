@@ -1,6 +1,6 @@
-use std::{env, fs, io::Read, path::Path};
+use std::{env, fs, io::{self, Read, Write}, path::Path};
 use fides::dsa::ed25519;
-
+mod lispeum;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     
@@ -11,18 +11,18 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     match command {
         "code" => {
             loop {
-                print!("lisp> ");  // Prompt for input
-                io::stdout().flush()?;  // Ensure the prompt is displayed immediately
+                print!("lispeum > ");
+                io::stdout().flush()?;
 
                 let mut code = String::new();
-                io::stdin().read_line(&mut code)?;  // Read a line of input
+                io::stdin().read_line(&mut code)?;
 
-                if code.trim() == ":quit" {  // Check for a quit command
+                if code.trim() == ":quit" {
                     break;
                 }
 
-                match evaluate_lisp(&code) {
-                    Ok(result) => println!("Result: {}", result),
+                match lispeum::evaluate(&code) {
+                    Ok(result) => println!("result: {}", result),
                     Err(e) => println!("Error: {}", e),
                 }
             }
