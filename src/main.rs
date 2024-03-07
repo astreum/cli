@@ -6,9 +6,27 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     
     let arguments: Vec<String> = env::args().collect();
 
-    let topic: &str = arguments.get(1).ok_or("invalid arguments!")?;
+    let command: &str = arguments.get(1).ok_or("invalid arguments!")?;
 
-    match topic {
+    match command {
+        "code" => {
+            loop {
+                print!("lisp> ");  // Prompt for input
+                io::stdout().flush()?;  // Ensure the prompt is displayed immediately
+
+                let mut code = String::new();
+                io::stdin().read_line(&mut code)?;  // Read a line of input
+
+                if code.trim() == ":quit" {  // Check for a quit command
+                    break;
+                }
+
+                match evaluate_lisp(&code) {
+                    Ok(result) => println!("Result: {}", result),
+                    Err(e) => println!("Error: {}", e),
+                }
+            }
+        }
         "account" => {
 
             let key_path = Path::new("./key.bin");
@@ -32,36 +50,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
 
         },
-        "block" => {
-            let command: &str = arguments.get(2).ok_or("invalid block argument!")?;
-            
-            match command {
-                "view" => println!("block view coming soon!"),
-                _ => println!("invalid block command!")
-            }
-        },
-        "chain" => {
-            let command: &str = arguments.get(2).ok_or("invalid chain argument!")?;
-            
-            match command {
-                "sync" => println!("chain sync coming soon!"),
-                "view" => println!("chain view coming soon!"),
-                _ => println!("invalid chain command!")
-            }
-        },
-        "shell" => {
-            println!("shell coming soon!")
-        },
-        "tx" => {
-            let command: &str = arguments.get(2).ok_or("invalid transaction argument!")?;
-            
-            match command {
-                "new" => println!("transaction new coming soon!"),
-                "view" => println!("transaction view coming soon!"),
-                _ => println!("invalid transaction command!")
-            }
-        },
-        _ => println!("invalid topic!")
+        
+        _ => println!("invalid command!")
     }
 
     Ok(())
