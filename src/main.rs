@@ -11,6 +11,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     match command {
         "code" => {
             loop {
+                let mut env = lispeum::Environment::new();
+
                 print!("lispeum > ");
                 io::stdout().flush()?;
 
@@ -21,7 +23,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     break;
                 }
 
-                match lispeum::evaluate(&code) {
+                let lispeum_expr = lispeum::parse_lispeum_string(&code)?;
+
+                match lispeum::evaluate(lispeum_expr, &mut env) {
                     Ok(result) => println!("result: {}", result),
                     Err(e) => println!("Error: {}", e),
                 }
