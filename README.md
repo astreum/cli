@@ -14,31 +14,11 @@ The general syntax for using the Astreum CLI is:
 
 Astreum CLI supports the following topics:
 
-- `account`: Manage blockchain accounts.
-- `block`: Interact with individual blocks on the blockchain.
-- `chain`: Manage and view the blockchain.
-- `shell`: Access the Astreum interactive programming environment (coming soon).
-- `tx`: Manage transactions on the blockchain.
-
-#### Account Commands
-
-- `astreum account all`: Display all accounts (coming soon).
-- `astreum account new`: Create a new account (coming soon).
-- `astreum account view <account_address>`: View details of an account (coming soon).
-
-#### Block Commands
-
-- `astreum block view <block_hash>`: View details of a block (coming soon).
-
-#### Chain Commands
-
-- `astreum chain sync`: Synchronize the local chain with the network (coming soon).
-- `astreum chain view <block_hash>`: View details of the current chain (coming soon).
-
-#### Transaction Commands
-
-- `astreum tx new`: Create a new transaction (coming soon).
-- `astreum tx view <tx_hash>`: View details of a transaction (coming soon).
+- account
+- send [amount] to [address] `coming soon`
+- sync `coming soon`
+- api `coming soon`
+- code `coming soon`
 
 ## Error Handling
 
