@@ -1,6 +1,8 @@
 use std::collections::HashMap;
 
 use super::expression::Expr;
+
+#[derive(Debug)]
 pub struct Environment {
     pub data: HashMap<String, Expr>,
 }

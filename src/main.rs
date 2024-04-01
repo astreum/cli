@@ -13,23 +13,24 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     match command {
         "code" => {
+            let mut lspm_env: Environment = Environment::new();
+            let spcl_fns: SpecialFunctions = SpecialFunctions::new();
+            
             loop {
-                let mut lspm_env: Environment = Environment::new();
-                let spcl_fns: SpecialFunctions = SpecialFunctions::new();
                 print!("lispeum > ");
                 io::stdout().flush()?;
 
                 let mut code = String::new();
                 io::stdin().read_line(&mut code)?;
 
-                if code.trim() == ":quit" {
+                if code.trim() == ":q" {
                     break;
                 }
 
                 let lispeum_expr = lispeum::parse_lispeum_string(&code)?;
 
                 match lispeum::evaluator::evaluate(lispeum_expr, &mut lspm_env, &spcl_fns) {
-                    Ok(result) => println!("result: {}", result),
+                    Ok(result) => println!("{}", result),
                     Err(e) => println!("error: {}", e),
                 }
 

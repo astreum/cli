@@ -17,13 +17,8 @@ impl SpecialFunctions {
         Self { functions }
     }
 
-    pub fn register(&mut self, name: String, function: FnPtr) {
-        self.functions.insert(name, function);
-    }
-
     pub fn call(&self, name: &str, args: Vec<Expr>, env: &mut Environment) -> Result<Expr, String> {
         if let Some(function) = self.functions.get(name) {
-            // Now passing `self` as a reference to `SpecialFunctions`
             function(args, env, self)
         } else {
             Err(format!("Function '{}' not found", name))
