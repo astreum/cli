@@ -1,11 +1,11 @@
 use self::{expression::Expr, parser::parse, tokenizer::tokenize};
 
-mod environment;
-mod evaluator;
-mod expression;
-mod parser;
-mod special;
-mod tokenizer;
+pub mod environment;
+pub mod evaluator;
+pub mod expression;
+pub mod parser;
+pub mod special;
+pub mod tokenizer;
 
 // pub fn evaluate(expr: LispExpr, env: &mut Environment) -> Result<LispExpr, String> {
 //     match expr {

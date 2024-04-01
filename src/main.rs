@@ -1,5 +1,8 @@
 use std::{env, fs, io::{self, Read, Write}, path::Path};
 use fides::dsa::ed25519;
+use lispeum::environment::Environment;
+
+use crate::lispeum::special::SpecialFunctions;
 mod lispeum;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -11,8 +14,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     match command {
         "code" => {
             loop {
-                let mut lispeum_environment = lispeum::Environment::new();
-
+                let mut lspm_env: Environment = Environment::new();
+                let spcl_fns: SpecialFunctions = SpecialFunctions::new();
                 print!("lispeum > ");
                 io::stdout().flush()?;
 
@@ -25,7 +28,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
                 let lispeum_expr = lispeum::parse_lispeum_string(&code)?;
 
-                match lispeum::evaluate(lispeum_expr, &mut lispeum_environment) {
+                match lispeum::evaluator::evaluate(lispeum_expr, &mut lspm_env, &spcl_fns) {
                     Ok(result) => println!("result: {}", result),
                     Err(e) => println!("error: {}", e),
                 }
