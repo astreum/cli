@@ -1,9 +1,10 @@
-use std::{env, fs, io::{self, Read, Write}, path::Path};
+use std::{env, fs, io::{self, Read, Write}, net::TcpListener, path::Path};
 use fides::dsa::ed25519;
 use lispeum::environment::Environment;
 
-use crate::lispeum::special::SpecialFunctions;
-mod lispeum;
+use crate::{api::connection::handle_connection, lispeum::special::SpecialFunctions};
+pub mod lispeum;
+pub mod api;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     
@@ -59,6 +60,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
 
         },
+        "api" => {
+            let listener = TcpListener::bind("127.0.0.1:22274").expect("Could not bind to port");
+            println!("Server listening on port 22274");
+
+            for stream in listener.incoming() {
+                let stream = stream.expect("Failed to accept connection");
+                handle_connection(stream);
+            }
+        }
         
         _ => println!("invalid command!")
     }
