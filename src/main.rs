@@ -1,14 +1,41 @@
-use std::{env, fs, io::Read, path::Path};
+use std::{env, fs, io::{self, Read, Write}, path::Path};
 use fides::dsa::ed25519;
+use lispeum::environment::Environment;
 
+use crate::lispeum::special::SpecialFunctions;
+mod lispeum;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     
     let arguments: Vec<String> = env::args().collect();
 
-    let topic: &str = arguments.get(1).ok_or("invalid arguments!")?;
+    let command: &str = arguments.get(1).ok_or("invalid arguments!")?;
 
-    match topic {
+    match command {
+        "code" => {
+            let mut lspm_env: Environment = Environment::new();
+            let spcl_fns: SpecialFunctions = SpecialFunctions::new();
+            
+            loop {
+                print!("lispeum > ");
+                io::stdout().flush()?;
+
+                let mut code = String::new();
+                io::stdin().read_line(&mut code)?;
+
+                if code.trim() == ":q" {
+                    break;
+                }
+
+                let lispeum_expr = lispeum::parse_lispeum_string(&code)?;
+
+                match lispeum::evaluator::evaluate(lispeum_expr, &mut lspm_env, &spcl_fns) {
+                    Ok(result) => println!("{}", result),
+                    Err(e) => println!("error: {}", e),
+                }
+
+            }
+        }
         "account" => {
 
             let key_path = Path::new("./key.bin");
@@ -32,36 +59,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
 
         },
-        "block" => {
-            let command: &str = arguments.get(2).ok_or("invalid block argument!")?;
-            
-            match command {
-                "view" => println!("block view coming soon!"),
-                _ => println!("invalid block command!")
-            }
-        },
-        "chain" => {
-            let command: &str = arguments.get(2).ok_or("invalid chain argument!")?;
-            
-            match command {
-                "sync" => println!("chain sync coming soon!"),
-                "view" => println!("chain view coming soon!"),
-                _ => println!("invalid chain command!")
-            }
-        },
-        "shell" => {
-            println!("shell coming soon!")
-        },
-        "tx" => {
-            let command: &str = arguments.get(2).ok_or("invalid transaction argument!")?;
-            
-            match command {
-                "new" => println!("transaction new coming soon!"),
-                "view" => println!("transaction view coming soon!"),
-                _ => println!("invalid transaction command!")
-            }
-        },
-        _ => println!("invalid topic!")
+        
+        _ => println!("invalid command!")
     }
 
     Ok(())

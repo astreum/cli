@@ -15,7 +15,7 @@ The general syntax for using the Astreum CLI is:
 Astreum CLI supports the following commands:
 
 - account
-- send <amount> to <address> `coming soon`
+- send [amount] to [address] `coming soon`
 - sync `coming soon`
 - api `coming soon`
 - code `coming soon`
