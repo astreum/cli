@@ -12,7 +12,7 @@ pub fn define(args: Vec<Expr>, env: &mut Environment, special_funcs: &SpecialFun
 
     let name = match &args[0] {
         Expr::Symbol(s) => s.clone(),
-        _ => return Err("First argument to define must be a symbol".to_string()),
+        _ => return Err("first argument to define must be a symbol".to_string()),
     };
 
     let value = match evaluate(args[1].clone(), env, special_funcs) {

@@ -6,6 +6,7 @@ pub enum Expr {
     Symbol(String),
     Integer(i64), // "123"
     String(String), // "string_example"
+    Function(Vec<String>, Box<Expr>),
 }
 
 impl fmt::Display for Expr {
@@ -18,6 +19,11 @@ impl fmt::Display for Expr {
             Expr::Symbol(s) => write!(f, "{}", s),
             Expr::Integer(s) => write!(f, "{}", s),
             Expr::String(s) => write!(f, "{}", s),
+            Expr::Function(params, body) => {
+                let params_str = params.join(" ");
+                let body_str = format!("{}", body);
+                write!(f, "(fn ({}) {})", params_str, body_str)
+            },
         }
     }
 }
