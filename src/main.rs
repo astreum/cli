@@ -69,8 +69,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 handle_connection(stream);
             }
         }
-        
+        "sync" => {
+            println!("test chain sync started ...");
+            loop { }
+        },
         _ => println!("invalid command!")
+
     }
 
     Ok(())
