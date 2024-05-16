@@ -2,9 +2,10 @@ use std::{env, fs, io::{self, Read, Write}, net::TcpListener, path::Path};
 use fides::dsa::ed25519;
 use lispeum::environment::Environment;
 
-use crate::{api::connection::handle_connection, lispeum::special::SpecialFunctions};
+use crate::{api::connection::handle_connection, lispeum::special::SpecialFunctions, node::Node};
 pub mod lispeum;
 pub mod api;
+pub mod node;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     
@@ -71,7 +72,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
         "sync" => {
             println!("test chain sync started ...");
-            loop { }
+            let node_obj = Node::new()?;
+            node_obj.start()?;
         },
         _ => println!("invalid command!")
 
