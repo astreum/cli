@@ -1,5 +1,5 @@
 use std::{error::Error, fs, io::Read, path::Path};
-
+pub mod relay;
 
 pub struct Node {
     pke_secret_key: [u8; 32],
@@ -33,7 +33,7 @@ impl Node {
 
     pub fn start(self) -> Result<Self, Box<dyn Error>> {
         loop {
-            
+
         }
     }
 }
