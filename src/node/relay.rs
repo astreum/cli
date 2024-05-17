@@ -110,3 +110,10 @@ impl TryFrom<&[u8]> for Ping {
         }
     }
 }
+
+#[derive(Clone, Debug)]
+pub struct Peer {
+    pub port: u16,
+    pub pke_shared_key: [u8; 32],
+    pub updated_at: u64
+}
