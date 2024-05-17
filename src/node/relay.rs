@@ -55,7 +55,58 @@ impl TryFrom<&[u8]> for Message {
                 decoded_message[0],
             ))
         } else {
-            Err("Internal error!")?
+            Err("message decoding error!")?
+        }
+    }
+}
+
+#[derive(Clone, Debug)]
+pub struct Ping {
+    pub port: u16,
+    pub pke_public_key: [u8; 32],
+    pub validator: bool
+}
+
+impl Ping {
+    pub fn new(port: &u16, pke_public_key: &[u8; 32], validator: &bool) -> Self {
+        Ping {
+            port: port.clone(),
+            pke_public_key: pke_public_key.clone(),
+            validator: validator.clone()
+        }
+    }
+}
+
+impl TryInto<Vec<u8>> for &Ping {
+    type Error = Box<dyn std::error::Error>;
+    fn try_into(self) -> Result<Vec<u8>, Self::Error> {
+        let encoding_input = [
+            &self.port.to_le_bytes()[..],
+            &self.pke_public_key[..],
+            if self.validator { &[1_u8][..] } else { &[0_u8][..] },
+        ];
+        let encoded = astro_format::encode(encoding_input)?;
+        Ok(encoded)
+    }
+}
+
+impl TryFrom<&[u8]> for Ping {
+    type Error = Box<dyn std::error::Error>;
+    fn try_from(value: &[u8]) -> Result<Self, Box<dyn std::error::Error>> {
+        let ping_fields: Vec<&[u8]> = astro_format::decode(value)?;
+        if ping_fields.len() >= 3 {
+            let validator = match ping_fields[2] {
+                [0] => false,
+                [1] => true,
+                _ => Err("ping decoding error: validator detail error!")?
+            };
+            Ok(Ping{
+                port: u16::from_be_bytes(ping_fields[0].try_into()?),
+                pke_public_key: ping_fields[1].try_into()?,
+                validator,
+            })
+        } else {
+            Err("ping decoding error: expected at least 3 fields!")?
         }
     }
 }

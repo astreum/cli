@@ -33,6 +33,7 @@ impl Node {
 
     pub fn start(self) -> Result<Self, Box<dyn Error>> {
         loop {
+            
 
         }
     }
